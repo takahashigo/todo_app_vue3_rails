@@ -1,0 +1,58 @@
+@startuml
+
+class UsersController {
+  +create()
+  +update()
+  +destroy()
+}
+
+class SessionsController {
+  +create()
+  +destroy()
+}
+
+class TasksController {
+  +index()
+  +show()
+  +create()
+  +update()
+  +destroy()
+}
+
+class CategoriesController {
+  +index()
+  +show()
+  +create()
+  +update()
+  +destroy()
+}
+
+class User {
+  -id: Integer
+  -username: String
+  -email: String
+  -password: String
+}
+
+class Task {
+  -id: Integer
+  -user_id: Integer
+  -category_id: Integer
+  -name: String
+  -detail: String
+  -due_date: Date
+  -priority: Integer
+  -status: String
+}
+
+class Category {
+  -id: Integer
+  -user_id: Integer
+  -name: String
+}
+
+User "1" *-- "*" Task : has
+User "1" *-- "*" Category : has
+Category "1" *-- "*" Task : has
+
+@enduml

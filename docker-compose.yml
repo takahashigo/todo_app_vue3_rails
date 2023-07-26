@@ -1,0 +1,53 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0.31
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - mysql-store:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD  #=== .envの環境変数から持ってくる
+    ports:
+      - '3306:3306'
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:  #=== Dockerfileに引数として渡せる
+        WORKDIR: $WORKDIR
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./backend:/$WORKDIR
+      - gem-store:/usr/local/bundle
+    environment:  #=== 環境変数の設定
+      TZ: Asia/Tokyo
+      RAILS_ENV: development
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+    depends_on:
+      - db
+    stdin_open: true
+    tty: true
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        WORKDIR: $WORKDIR
+    volumes:
+      - ./frontend:/$WORKDIR:cached
+      - node_modules:/$WORKDIR/node_modules
+    ports:
+      - '5173:5173'
+    depends_on:
+      - backend
+    tty: true
+    command: yarn dev --host
+volumes:
+  mysql-store:
+  gem-store:
+  node_modules:
+
+

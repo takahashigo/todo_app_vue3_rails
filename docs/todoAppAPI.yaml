@@ -1,0 +1,335 @@
+openapi: 3.0.0
+info:
+  title: TODO APP API
+  version: 1.0.0
+tags:
+- name: Task
+  description: Operations about task
+- name: Category
+  description: Operations about category
+- name: Authentication
+  description: Operations about authentication
+paths:
+  /tasks:
+    post:
+      tags:
+      - Task
+      summary: タスク作成
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                detail:
+                  type: string
+                due_date:
+                  type: string
+                  format: date
+                priority:
+                  type: integer
+                category_id:
+                  type: integer
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  detail:
+                    type: string
+                  due_date:
+                    type: string
+                  priority:
+                    type: integer
+                  category_id:
+                    type: integer
+    get:
+      tags:
+      - Task
+      summary: タスク一覧取得
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    detail:
+                      type: string
+                    due_date:
+                      type: string
+                    priority:
+                      type: integer
+                    category_id:
+                      type: integer
+  /tasks/{id}:
+    put:
+      tags:
+      - Task
+      summary: タスク編集
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                detail:
+                  type: string
+                due_date:
+                  type: string
+                  format: date
+                priority:
+                  type: integer
+                category_id:
+                  type: integer
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  detail:
+                    type: string
+                  due_date:
+                    type: string
+                  priority:
+                    type: integer
+                  category_id:
+                    type: integer
+    delete:
+      tags:
+      - Task
+      summary: タスク削除
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /categories:
+    post:
+      tags:
+      - Category
+      summary: カテゴリー作成
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+    get:
+      tags:
+      - Category
+      summary: カテゴリー一覧取得
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+  /categories/{id}:
+    put:
+      tags:
+      - Category
+      summary: カテゴリー編集
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+    delete:
+      tags:
+      - Category
+      summary: カテゴリー削除
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /signup:
+    post:
+      tags:
+      - Authentication
+      summary: ユーザー登録
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "201":
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  username:
+                    type: string
+                  email:
+                    type: string
+  /login:
+    post:
+      tags:
+      - Authentication
+      summary: ユーザーログイン
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /logout:
+    delete:
+      tags:
+      - Authentication
+      summary: ユーザーログアウト
+      responses:
+        "200":
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /csrf_token:
+    get:
+      tags:
+      - Authentication
+      summary: CSRF token 取得
+      responses:
+        "200":
+          description: CSRF token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  csrf_token:
+                    type: string

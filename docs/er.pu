@@ -1,0 +1,33 @@
+@startuml
+entity "Users" as users {
+  + id : integer [PK]
+  --
+  username : varchar(255)
+  email : varchar(255)
+  password : varchar(255)
+}
+
+entity "Tasks" as tasks {
+  + id : integer [PK]
+  --
+  # user_id : integer [FK(users, id)]
+  # category_id : integer [FK(categories, id)]
+  name : varchar(255)
+  detail : text
+  due_date : date
+  priority : integer
+  status : varchar(255)
+}
+
+entity "Categories" as categories {
+  + id : integer [PK]
+  --
+  # user_id : integer [FK(users, id)]
+  name : varchar(255)
+}
+
+users ||--o{ tasks : has
+users ||--o{ categories : has
+categories ||--o{ tasks : has
+@enduml
+
